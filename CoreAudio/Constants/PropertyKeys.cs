@@ -90,7 +90,14 @@ namespace CoreAudio.Constants
 		/// <summary>
 		/// Contains the friendly name of the endpoint device.
 		/// </summary>
-		public static readonly Guid PKEY_DeviceInterface_FriendlyName = new Guid(0xa45c254e, 0xdf1c, 0x4efd, 0x80, 0x20, 0x67, 0xd1, 0x46, 0xa8, 0x50, 0xe0);
-
+		public static readonly Guid PKEY_Device_FriendlyName = new Guid(0xa45c254e, 0xdf1c, 0x4efd, 0x80, 0x20, 0x67, 0xd1, 0x46, 0xa8, 0x50, 0xe0); // PID 14
+		/// <summary>
+		/// Contains the friendly name of the endpoint interface.
+		/// </summary>
+		public static readonly Guid PKEY_DeviceInterface_FriendlyName = new Guid(0x026e516e, 0xb814, 0x414b, 0x83, 0xcd, 0x85, 0x6d, 0x6f, 0xef, 0x48, 0x22); // PID 2
+		/// <summary>
+		/// Contains the description of the endpoint device.
+		/// </summary>
+		public static readonly Guid PKEY_Device_DeviceDesc = new Guid(0xa45c254e, 0xdf1c, 0x4efd, 0x80, 0x20, 0x67, 0xd1, 0x46, 0xa8, 0x50, 0xe0); // PID 2
 	}
 }
