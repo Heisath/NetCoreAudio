@@ -1,0 +1,7 @@
+{
+  "profiles": {
+    "NetCoreAudio": {
+      "commandName": "Project"
+    }
+  }
+}
