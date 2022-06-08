@@ -111,7 +111,7 @@ namespace NetCoreAudio
             }
             set
             {
-                double DisplayValue = (A + B * Math.Exp(C * value / 100.0F)) / 500.0;
+                float DisplayValue = (A + B * MathF.Exp(C * value / 100.0f)) / 500.0f;
                 (Control as ISimpleAudioVolume).SetMasterVolume(DisplayValue, Guid);
             }
         }
@@ -160,9 +160,9 @@ namespace NetCoreAudio
         #endregion
 
         #region Privates 
-        readonly double A = -100.0 / 3;
-        readonly double B = 100.0 / 3;
-        readonly double C = Math.Log(16.0);
+        readonly float A = -100.0f / 3;
+        readonly float B = 100.0f / 3;
+        readonly float C = MathF.Log(16.0f);        
         #endregion
 
         //#################################################################################################################################

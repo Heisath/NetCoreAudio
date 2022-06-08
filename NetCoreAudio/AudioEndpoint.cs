@@ -84,7 +84,7 @@ namespace NetCoreAudio
             DeviceEnumerator = (IMMDeviceEnumerator)new MMDeviceEnumerator();
             DeviceEnumerator.RegisterEndpointNotificationCallback(this);
 
-            if (State == EndpointState.Active || State == EndpointState.Disabled)
+            if (State == EndpointState.Active)
             {
                 VolumeControl = new AudioEndpointVolume(dev);
             }
