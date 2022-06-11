@@ -33,8 +33,7 @@ namespace NetCoreAudio
                 // get the speakers (1st render + multimedia) device
                 DeviceEnumerator.GetDefaultAudioEndpoint((EDataFlow)dataFlow, (ERole)role, out device);
                 if (device == null) return null;
-                device.GetId(out string id);
-                return new AudioEndpoint(id, device);
+                return new AudioEndpoint(device);
             }
             catch (COMException)
             {
@@ -72,8 +71,7 @@ namespace NetCoreAudio
                             }
                         }
 
-                        device.GetId(out string deviceId);
-                        l.Add(new AudioEndpoint(deviceId, device));
+                        l.Add(new AudioEndpoint(device));
                     }
                     catch (COMException)
                     {
@@ -100,7 +98,7 @@ namespace NetCoreAudio
             {
                 DeviceEnumerator.GetDevice(endpointId, out device);
 
-                return new AudioEndpoint(endpointId, device);
+                return new AudioEndpoint(device);
             }
             catch (COMException)
             {

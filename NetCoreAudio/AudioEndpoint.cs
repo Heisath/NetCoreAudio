@@ -75,11 +75,12 @@ namespace NetCoreAudio
         //#################################################################################################################################
         #region Internal Functions
 
-        internal AudioEndpoint(string id, IMMDevice dev)
+        internal AudioEndpoint(IMMDevice dev)
         {
+            dev.GetId(out string id);
             Id = id;
             Device = dev;
-
+            
             DeviceEnumerator = (IMMDeviceEnumerator)new MMDeviceEnumerator();
             DeviceEnumerator.RegisterEndpointNotificationCallback(this);
 

@@ -20,6 +20,24 @@ namespace NetCoreAudio
         internal IAudioSessionControl2 Control { get; private set; }
         internal Guid Guid { get; private set; }
 
+        public string Id
+        {
+            get
+            {
+                Control.GetSessionIdentifier(out string id);
+                return id;
+            }
+        }
+
+        public string InstanceId
+        {
+            get
+            {
+                Control.GetSessionInstanceIdentifier(out string id);
+                return id;
+            }
+        }
+
         public uint ProcessId { 
             get
             {
