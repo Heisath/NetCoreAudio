@@ -13,7 +13,7 @@ namespace NetCoreAudioTests
         {
             using AudioEndpointManager m = new AudioEndpointManager();
             Assert.IsNotNull(m);
-            AudioEndpoint e= m.DefaultEndpoint(EndpointRole.Console, EndpointDataFlow.Render);
+            AudioEndpoint e = m.DefaultEndpoint(EndpointRole.Console, EndpointDataFlow.Render);
             Assert.IsNotNull(e.Id);
             Assert.AreNotEqual("", e.Id);
         }

@@ -21,7 +21,7 @@ namespace NetCoreAudio
         public string Name => GetPropertyFromStore(Device, CoreAudio.Constants.PropertyKeys.PKEY_Device_FriendlyName);
         public string Description => GetPropertyFromStore(Device, CoreAudio.Constants.PropertyKeys.PKEY_Device_DeviceDesc);
      
-        public AudioEndpointVolume VolumeControl { get; private set; }
+        public AudioEndpointVolume? VolumeControl { get; private set; }
 
         internal IMMDevice Device { get; private set; }
         internal IMMDeviceEnumerator DeviceEnumerator { get; private set; }
@@ -53,7 +53,6 @@ namespace NetCoreAudio
         #region Cleanup Functions
         protected override void DisposeManagedResources()
         {
-            Id = null;
             if (VolumeControl != null) VolumeControl.Dispose();
         }
 
@@ -70,7 +69,7 @@ namespace NetCoreAudio
 
         //#################################################################################################################################
         #region Events
-        public event PropertyChangedEventHandler PropertyChanged;
+        public event PropertyChangedEventHandler? PropertyChanged;
         #endregion
 
         //#################################################################################################################################
@@ -86,7 +85,7 @@ namespace NetCoreAudio
 
             if (State == EndpointState.Active)
             {
-                VolumeControl = new AudioEndpointVolume(dev);
+                VolumeControl = new AudioEndpointVolume(this, dev);
             }
         }
 
@@ -96,8 +95,8 @@ namespace NetCoreAudio
             if ((State & (EndpointState.NotPresent | EndpointState.Unplugged)) != 0)
                 return new List<AudioSession>();
 
-            IAudioSessionEnumerator sessionEnumerator = null;
-            IAudioSessionManager2 sessionManager = null;
+            IAudioSessionEnumerator? sessionEnumerator = null;
+            IAudioSessionManager2? sessionManager = null;
             try
             {
                 // activate the session manager. we need the enumerator
@@ -112,7 +111,7 @@ namespace NetCoreAudio
                 List<AudioSession> results = new();
                 for (int i = 0; i < count; ++i)
                 {
-                    IAudioSessionControl ctl = null;
+                    IAudioSessionControl? ctl = null;
                     try
                     {
                         sessionEnumerator.GetSession(i, out ctl);
@@ -135,12 +134,12 @@ namespace NetCoreAudio
 
         internal static string GetPropertyFromStore(IMMDevice device, PROPERTYKEY PKey)
         {
-            IPropertyStore deviceProperties = null;
+            IPropertyStore? deviceProperties = null;
             try
             {
                 device.OpenPropertyStore(STGM.STGM_READ, out deviceProperties);
                 deviceProperties.GetValue(ref PKey, out PROPVARIANT variant);
-                return Marshal.PtrToStringUni(variant.Data.AsStringPtr);
+                return Marshal.PtrToStringUni(variant.Data.AsStringPtr) ?? "";
             }
             finally
             {

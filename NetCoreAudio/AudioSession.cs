@@ -31,24 +31,24 @@ namespace NetCoreAudio
         {
             get
             {
-                Control.GetDisplayName(out string appname);
+                Control.GetDisplayName(out string? appname);
 
                 if (appname == null || appname == "")
                 {
                     try
                     {
                         var process = Process.GetProcessById((int)ProcessId);
-                        if (process == null) return null;
+                        if (process == null) return "Session name not available";
 
                         appname = process.MainWindowTitle;
 
-                        if (appname == "")
+                        if (appname == null || appname == "")
                         {
-                            appname = process.MainModule.FileVersionInfo.FileDescription;
+                            appname = process.MainModule?.FileVersionInfo.FileDescription;
                         }
-                        if (appname == "")
+                        if (appname == null || appname == "")
                         {
-                            appname = process.MainModule.FileVersionInfo.FileName;
+                            appname = process.MainModule?.FileVersionInfo.FileName;
                         }
                     }
                     catch (Exception) { }
@@ -59,20 +59,20 @@ namespace NetCoreAudio
                     appname = "System";
                 }
 
-                return appname;
+                return appname ?? "Session name not available";
             }
         }
         public string ProcessName
         {
             get
             {
-                string appname = null;
+                string? appname = null;
                 try
                 {
                     var process = Process.GetProcessById((int)ProcessId);
-                    if (process == null) return null;
+                    if (process == null) return "Process not found";
 
-                    appname = process.MainModule.FileVersionInfo.FileName;
+                    appname = process.MainModule?.FileVersionInfo.FileName;
                 }
                 catch (Exception) { }
 
@@ -83,7 +83,7 @@ namespace NetCoreAudio
                     appname = "System";
                 }
 
-                return appname;
+                return appname ?? "Process not found";
             }
         }
 
@@ -91,12 +91,13 @@ namespace NetCoreAudio
         {
             get
             {
-                (Control as ISimpleAudioVolume).GetMasterVolume(out float level);
+                float level = 0.0f;
+                (Control as ISimpleAudioVolume)?.GetMasterVolume(out level);
                 return level * 100.0F;
             }
             set
             {
-                (Control as ISimpleAudioVolume).SetMasterVolume(value, Guid);
+                (Control as ISimpleAudioVolume)?.SetMasterVolume(value, Guid);
             }
         }
 
@@ -104,15 +105,16 @@ namespace NetCoreAudio
         {
             get
             {
-                (Control as ISimpleAudioVolume).GetMasterVolume(out float level);
+                float level = 0.0f;
+                (Control as ISimpleAudioVolume)?.GetMasterVolume(out level);
 
-                double SliderValue = Math.Log((level * 500.0 - A) / B) / C;
-                return (float)SliderValue * 100.0F;
+                float SliderValue = MathF.Log((level * 500.0f - A) / B) / C;
+                return SliderValue * 100.0F;
             }
             set
             {
                 float DisplayValue = (A + B * MathF.Exp(C * value / 100.0f)) / 500.0f;
-                (Control as ISimpleAudioVolume).SetMasterVolume(DisplayValue, Guid);
+                (Control as ISimpleAudioVolume)?.SetMasterVolume(DisplayValue, Guid);
             }
         }
 
@@ -120,12 +122,13 @@ namespace NetCoreAudio
         {
             get
             {
-                (Control as ISimpleAudioVolume).GetMute(out bool mute);
+                bool mute = false;
+                (Control as ISimpleAudioVolume)?.GetMute(out mute);
                 return mute;
             }
             set
             {
-                (Control as ISimpleAudioVolume).SetMute(value, Guid);
+                (Control as ISimpleAudioVolume)?.SetMute(value, Guid);
             }
         }
 
@@ -133,8 +136,11 @@ namespace NetCoreAudio
 
         //#################################################################################################################################
         #region Public Functions
+        public override string ToString()
+        {
+            return $"{ProcessId}: {ProcessTitle}";
+        }
 
-        
         #endregion
 
         //#################################################################################################################################
@@ -156,9 +162,10 @@ namespace NetCoreAudio
 
         //#################################################################################################################################
         #region Events
-        public event PropertyChangedEventHandler PropertyChanged;
+        public event PropertyChangedEventHandler? PropertyChanged;
         #endregion
 
+        //#################################################################################################################################
         #region Privates 
         readonly float A = -100.0f / 3;
         readonly float B = 100.0f / 3;

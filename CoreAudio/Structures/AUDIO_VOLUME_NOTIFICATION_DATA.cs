@@ -34,6 +34,7 @@ namespace CoreAudio.Structures
         /// <summary>
         /// The user event context supplied during the change request.
         /// </summary>
+        [MarshalAs(UnmanagedType.Struct)]
         public Guid EventContext;
 
         /// <summary>
@@ -59,5 +60,33 @@ namespace CoreAudio.Structures
         /// </summary>
         [MarshalAs(UnmanagedType.LPArray, ArraySubType = UnmanagedType.R4)]
         public float[] ChannelVolumes;
+
+        /// <summary>
+        /// Parses a IntPtr pointing to a AUDIO_VOLUME_NOTIFICATION_DATA structure to an instance
+        /// </summary>
+        /// <returns></returns>
+        public static AUDIO_VOLUME_NOTIFICATION_DATA FromIntPtr(IntPtr data)
+        {
+            AUDIO_VOLUME_NOTIFICATION_DATA result = new AUDIO_VOLUME_NOTIFICATION_DATA();
+            if (data == IntPtr.Zero) return result;
+
+            result.EventContext = Marshal.PtrToStructure<Guid>(data);
+            data += Marshal.SizeOf(typeof(Guid));
+
+            result.IsMuted = Marshal.PtrToStructure<bool>(data);
+            data += Marshal.SizeOf(typeof(bool));
+
+            result.MasterVolume = Marshal.PtrToStructure<float>(data);
+            data += Marshal.SizeOf(typeof(float));
+
+            result.ChannelCount = Marshal.PtrToStructure<UInt32>(data);
+            data += Marshal.SizeOf(typeof(UInt32));
+
+            result.ChannelVolumes = new float[result.ChannelCount];
+            Marshal.Copy(data, result.ChannelVolumes, 0, (int)result.ChannelCount);
+
+            return result;
+
+        }
     }
 }

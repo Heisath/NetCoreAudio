@@ -25,9 +25,9 @@ namespace NetCoreAudio
             DeviceEnumerator.RegisterEndpointNotificationCallback(this);
         }
 
-        public AudioEndpoint DefaultEndpoint(EndpointRole role, EndpointDataFlow dataFlow)
+        public AudioEndpoint? DefaultEndpoint(EndpointRole role, EndpointDataFlow dataFlow)
         {
-            IMMDevice device = null;
+            IMMDevice? device = null;
             try
             {
                 // get the speakers (1st render + multimedia) device
@@ -44,11 +44,11 @@ namespace NetCoreAudio
         }
         public List<AudioEndpoint> EndpointByName(string name = "", EndpointDataFlow dataFlow = EndpointDataFlow.All, EndpointState endpointState = EndpointState.Any)
         {
-            IMMDeviceCollection deviceCollection = null;
-            IPropertyStore deviceProperties = null;
-            IMMDevice device = null;
+            IMMDeviceCollection? deviceCollection = null;
+            IPropertyStore? deviceProperties = null;
+            IMMDevice? device = null;
 
-            List<AudioEndpoint> l = new List<AudioEndpoint>();
+            List<AudioEndpoint> l = new();
             try
             {
                 DeviceEnumerator.EnumAudioEndpoints((EDataFlow)dataFlow, (uint)endpointState, out deviceCollection);
@@ -93,9 +93,9 @@ namespace NetCoreAudio
 
             return l;
         }
-        public AudioEndpoint EndpointById(string endpointId)
+        public AudioEndpoint? EndpointById(string endpointId)
         {
-            IMMDevice device = null;
+            IMMDevice? device = null;
             try
             {
                 DeviceEnumerator.GetDevice(endpointId, out device);
